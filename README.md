@@ -140,23 +140,3 @@ En el dashboard podrás visualizar:
 ├── requirements.txt
 ├── README.md
 └── config.toml
-```
-
----
-
-##  **Notas Finales**
-
-* Este proyecto es ideal para prácticas de Ingeniería de Datos, automatización y visualización.
-* WeatherAPI cuenta con un plan gratuito suficiente para pruebas.
-* La base de datos crece con cada ejecución, permitiendo análisis históricos.
-
-Si deseas extender este proyecto, algunas ideas son:
-
-* Integrar almacenamiento en la nube (AWS S3, BigQuery, PostgreSQL, etc.)
-* Agregar monitoreo con Prometheus/Grafana
-* Ejecutar el ETL en un cron job automatizado
-
----
-
-¡Gracias por revisar este proyecto!
-Si te es útil, no olvides dejar una ⭐ en GitHub.
