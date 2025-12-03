@@ -1,0 +1,80 @@
+# ================================================
+# EXCLUSIONES ESPECÍFICAS DEL PROYECTO DE ING. DE DATOS
+# ================================================
+
+# Bases de datos binarias
+*.sqlite
+*.db
+*.db3
+clima_db.sqlite
+
+# Python cache y archivos generados
+__pycache__/
+*.pyc
+*.pyd
+*.so
+*.log
+
+# Entornos virtuales
+venv/
+.venv/
+
+# Archivos sensibles
+config.toml
+.env
+*.env
+.env.*
+
+# Carpetas de datos (opcional según tu proyecto)
+data/
+data_raw/
+data_processed/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# ================================================
+# EXCLUSIONES POR SISTEMA OPERATIVO
+# ================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+*.icloud
+
+# Linux
+~
+.fuse_hidden
+.directory
+.Trash-*
+.nfs*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
