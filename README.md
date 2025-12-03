@@ -1,141 +1,162 @@
-Proyecto de Ingeniería de Datos: Análisis del Clima Urbano
+# Proyecto de Ingeniería de Datos: **Análisis del Clima Urbano**
 
-1. Descripción y Caso de Uso
+Este repositorio contiene un pipeline ETL completo y un dashboard interactivo para monitorear condiciones climáticas urbanas en tiempo casi real. El sistema extrae datos desde una API pública, los transforma, los almacena en una base de datos relacional y finalmente los visualiza de forma clara y accesible.
 
-Tema
+---
 
-Pipeline ETL y Dashboard de Visualización para el Monitoreo de Condiciones Climáticas Urbanas.
+## **1. Descripción del Proyecto**
 
-Caso de Uso
+### **Objetivo General**
 
-Este proyecto simula un proceso de Ingesta y Análisis de Datos en tiempo casi real. El objetivo es extraer información climática actual (temperatura, humedad, presión) para un conjunto de ciudades globales desde una API pública (WeatherAPI), transformarla, cargarla en una base de datos relacional (SQLite) y, finalmente, visualizar las tendencias históricas y los indicadores clave (KPIs) en un dashboard interactivo desarrollado en Streamlit.
+Construir un flujo automatizado de **Extracción, Transformación y Carga (ETL)** para recopilar información climática de diferentes ciudades alrededor del mundo, almacenarla como historial y visualizarla mediante un dashboard.
 
-Fuente de Datos
+### **Caso de Uso**
 
-Tipo: API REST pública (WeatherAPI).
+Este proyecto simula un proceso real de **monitoreo ambiental** en ciudades globales. Cada ejecución registra condiciones actuales como:
 
-Variables Principales: Nombre de la ciudad, país, coordenadas, temperatura en °C, humedad (%), presión (hPa) y marca de tiempo (timestamp).
+* Temperatura (°C)
+* Humedad (%)
+* Presión atmosférica (hPa)
+* Hora de la medición
 
-2. Modelo de Datos (Diagrama Simple)
+Los datos se almacenan de forma histórica para analizar tendencias de corto plazo.
 
-El proyecto utiliza un esquema de estrella simple para el almacenamiento de datos, optimizado para el análisis de series de tiempo.
+### **Fuente de Datos**
 
-Tabla
+* **Tipo:** API REST pública
+* **Proveedor:** WeatherAPI
+* **Variables principales:** ciudad, país, coordenadas, temperatura, humedad, presión y timestamp.
 
-Tipo
+---
 
-Descripción
+##  **2. Modelo de Datos (Esquema Simplificado)**
 
-Clave Primaria (PK)
+El sistema utiliza un modelo tipo **estrella (Star Schema)**, pensado para análisis de series de tiempo.
 
-Clave Foránea (FK)
+| Tabla               | Tipo      | Descripción                                                            | PK            | FK                       |
+| ------------------- | --------- | ---------------------------------------------------------------------- | ------------- | ------------------------ |
+| **DIM_CIUDADES**    | Dimensión | Información estática de cada ciudad (nombre, país, latitud, longitud). | id_ciudad     | -                        |
+| **FACT_PRONOSTICO** | Hechos    | Registra cada medición del clima. Almacena el historial.               | id_pronostico | ciudad_id → DIM_CIUDADES |
 
-DIM_CIUDADES
+Este diseño permite consultar mediciones por ciudad, generar gráficos históricos y analizar tendencias.
 
-Dimensión
+---
 
-Almacena las características estáticas de las ciudades (nombre, país, latitud, longitud).
+##  **3. Instalación y Configuración**
 
-id_ciudad
+### **A. Clonar el repositorio**
 
--
-
-FACT_PRONOSTICO
-
-Hechos
-
-Almacena las mediciones de clima en cada momento de la ejecución. Es la tabla que acumula el historial.
-
-id_pronostico
-
-ciudad_id $\to$ DIM_CIUDADES
-
-3. Guía de Instalación y Configuración
-
-A. Instalación de Dependencias
-
-Se requiere Python 3.9+ y el gestor de paquetes pip.
-
-Clonar el repositorio: (Asumiendo que es un repositorio)
-
+```bash
 git clone [URL_DEL_REPOSITORIO]
 cd proyecto_clima
+```
 
+### **B. Crear y activar entorno virtual (venv)**
 
-
-
-
-Crear y Activar el Entorno Virtual (venv):
-
+```bash
 python3 -m venv venv
-source venv/bin/activate
+source venv/bin/activate   # macOS / Linux
+# .\venv\Scripts\activate  # Windows
+```
 
+### **C. Instalar dependencias**
 
+El proyecto incluye un archivo `requirements.txt` con todas las librerías necesarias.
 
-
-
-Instalar librerías necesarias:
-
-¡Importante! Instala todas las dependencias del proyecto usando el archivo requirements.txt recién creado:
-
+```bash
 pip install -r requirements.txt
+```
 
+---
 
+##  **4. Configurar la API Key**
 
+El acceso a la API requiere una clave personal de WeatherAPI.
 
-B. Configuración de la API Key
+1. Abre el archivo **config.toml**.
+2. Sustituye el valor de `key` por tu API Key.
 
-La clave de la API y la lista de ciudades se gestionan a través de un archivo de configuración para mantener el código limpio.
+Ejemplo:
 
-Abre el archivo config.toml.
-
-Reemplaza el valor de key con tu clave de API de WeatherAPI.
-
-# config.toml
+```toml
 [api]
-key = "TU_CLAVE_AQUI" 
-base_url = "[http://api.weatherapi.com/v1/current.json](http://api.weatherapi.com/v1/current.json)"
+key = "TU_CLAVE_AQUI"
+base_url = "http://api.weatherapi.com/v1/current.json"
 
 [ciudades]
 lista = ["Seoul", "Mexico City", "Beijing", "Tokyo", "Taipei"]
+```
 
+Puedes agregar o quitar ciudades según tus necesidades.
 
+---
 
+##  **5. Ejecución del Pipeline ETL y Dashboard**
 
-4. Ejecución del Pipeline ETL y Dashboard
+Para simplificar todo el proceso, el proyecto incluye el script automatizado **run_full_pipeline.sh**, que:
 
-Para simplificar la operación, se utiliza un script de shell (.sh) que automatiza todo el proceso:
+* Activa el entorno virtual.
+* Ejecuta el ETL tres veces para generar historial.
+* Lanza el dashboard de Streamlit automáticamente.
 
-Activa el entorno virtual.
+### **A. Dar permisos de ejecución al script**
 
-Ejecuta el ETL (python main_etl.py) tres veces para acumular datos históricos, lo cual es necesario para dibujar la "Tendencia Histórica".
-
-Lanza el dashboard de Streamlit.
-
-A. Dar Permisos de Ejecución
-
-Asegúrate de que el script tenga permisos para ejecutarse:
-
+```bash
 chmod +x run_full_pipeline.sh
+```
 
+### **B. Ejecutar el pipeline maestro**
 
-
-
-
-B. Ejecutar el Pipeline Maestro
-
-Ejecuta el script desde la carpeta principal del proyecto:
-
+```bash
 ./run_full_pipeline.sh
+```
 
+### **C. Verificación**
 
+* La terminal mostrará la salida de cada ejecución del ETL.
+* Se generará/actualizará la base de datos **clima_db.sqlite**.
+* El dashboard abrirá en el navegador:
+  **[http://localhost:8501](http://localhost:8501)**
 
+En el dashboard podrás visualizar:
 
+* Temperatura actual por ciudad
+* Humedad y presión
+* Tendencia histórica (acumulada por las corridas del ETL)
+* KPIs clave
 
-C. Verificar
+---
 
-La Terminal mostrará los mensajes de las tres ejecuciones del ETL.
+## **Estructura del Proyecto**
 
-El archivo de base de datos clima_db.sqlite se creará/actualizará automáticamente.
+```
+├── dashboard.py
+├── extract.py
+├── transform.py
+├── load.py
+├── main_etl.py
+├── run_full_pipeline.sh
+├── schema.sql
+├── requirements.txt
+├── README.md
+└── config.toml
+```
 
-El dashboard de Streamlit se abrirá en tu navegador web (http://localhost:8501), mostrando las visualizaciones con el historial de las últimas 48 horas por defecto.
+---
+
+##  **Notas Finales**
+
+* Este proyecto es ideal para prácticas de Ingeniería de Datos, automatización y visualización.
+* WeatherAPI cuenta con un plan gratuito suficiente para pruebas.
+* La base de datos crece con cada ejecución, permitiendo análisis históricos.
+
+Si deseas extender este proyecto, algunas ideas son:
+
+* Integrar almacenamiento en la nube (AWS S3, BigQuery, PostgreSQL, etc.)
+* Agregar monitoreo con Prometheus/Grafana
+* Ejecutar el ETL en un cron job automatizado
+
+---
+
+¡Gracias por revisar este proyecto!
+Si te es útil, no olvides dejar una ⭐ en GitHub.
